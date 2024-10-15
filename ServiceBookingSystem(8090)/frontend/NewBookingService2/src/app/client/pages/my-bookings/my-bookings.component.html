@@ -1,0 +1,23 @@
+<div class="container" style="padding: 30px;">
+    <table class="table table-bordered table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th style="font-weight: bolder; color: blue;">Service</th>
+          <th style="font-weight: bolder; color: blue;">Date</th>
+          <th style="font-weight: bolder; color: blue;">Status</th>
+          <th style="font-weight: bolder; color: blue;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let booking of bookedService">
+          <td style="font-weight: 600;">{{ booking.serviceName }}</td>
+          <td>{{ booking.bookDate | date: 'dd/MM/yyyy' }}</td>
+          <td style="font-weight: 600;">{{ booking.reservationStatus }}</td>
+          <td *ngIf="booking.reservationStatus == 'FALSE'">
+            <button class="btn btn-primary btn-sm" style="margin-top: 5px;">Review</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

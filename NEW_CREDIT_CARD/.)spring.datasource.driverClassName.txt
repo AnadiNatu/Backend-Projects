@@ -1,0 +1,238 @@
+.)spring.datasource.driverClassName=org.h2.Driver
+.)spring.datasource.username=sa
+.)spring.datasource.password=
+.)spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+.)server.port=
+
+
+.) spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/pokemondb
+spring.datasource.username=postgres
+spring.datasource.password=Anadi@1234
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.show-sql=true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pokémon Security
+
+CustomUserDetailService
+
+@Service
+public class CustomUserDetailService implements UserDetailsService {
+
+    private UserRepository userRepository;
+
+    @Autowired
+    public CustomUserDetailService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        return new User(user.getUsername() , user.getPassword() , mapRoleToAuthorities(user.getRoles()));
+
+        //User requires a roles that we need for the function
+    }
+
+    private Collection<GrantedAuthority> mapRoleToAuthorities(List<Role> roles){
+
+        return roles.stream().map( role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+
+        //
+    }
+}
+
+
+
+
+JWTAuthenticationFilter
+
+
+@Component
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtGenerator jwtGenerator;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String token = getJWTFromRequest(request);
+
+        if (StringUtils.hasText(token) && jwtGenerator.validateToken(token)){
+            String username =  jwtGenerator.getUsernameFromJwt(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails , null , userDetails.getAuthorities());
+
+
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+               }
+        filterChain.doFilter(request,response);
+    }
+    private String getJWTFromRequest( HttpServletRequest request ) {
+        String bearerToken = request.getHeader("Authentication");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
+
+            return bearerToken.substring(7 , bearerToken.length());
+        }
+        return null ;
+    }
+
+}
+
+
+
+JwtAuthEntryPoint 
+
+@Component
+public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
+
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED , authException.getMessage());
+
+    }
+}
+
+
+
+JwtGenerator
+
+public class JwtGenerator {
+
+    public String generateToken(Authentication authentication){
+
+        String username = authentication.getName();
+        Date currentDate = new Date();
+        Date expirationDate = new Date(currentDate.getTime() + SecurityConstant.JWT_EXPIRATION);
+
+
+        String token = Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.ES256 , SecurityConstant.JWT_SECRET)
+                .compact();
+        return token;
+    }
+
+
+
+    public String getUsernameFromJwt(String token){
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(SecurityConstant.JWT_SECRET)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token){
+
+        try {
+            Jwts.parserBuilder().setSigningKey(SecurityConstant.JWT_SECRET).build().parseClaimsJwt(token);
+            return true;
+        }catch (Exception ex){
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+        }
+    }
+}
+
+
+
+
+SecurityConfig
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    private CustomUserDetailService customUserDetailService;
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
+
+
+    @Autowired
+    public SecurityConfig(CustomUserDetailService customUserDetailService , JwtAuthEntryPoint jwtAuthEntryPoint) {
+        this.customUserDetailService = customUserDetailService;
+        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
+
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+        http.csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic();
+
+                http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                return http.build();
+
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+
+        return authenticationConfiguration.getAuthenticationManager();
+
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+
+        return new BCryptPasswordEncoder();
+
+    }
+
+    @Bean
+    public JWTAuthenticationFilter jwtAuthenticationFilter(){
+
+        return new JWTAuthenticationFilter();
+    }
+}
+
+
+SecurityConstant
+
+

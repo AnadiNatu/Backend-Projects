@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row" *ngFor="let ad of ads" style="margin-top: 10px;">
+        <div class="col-md-4">
+            <img [src]="updateImg(ad.returnedImg)" class="img-fluid rounded" style="height: 130px; width: 200px;">
+        </div>
+
+        <div class="col-md-8">
+            <h2 class="text-primary" style="cursor: pointer;">{{ad.serviceName}}</h2>
+
+            <hr>
+
+            <h5>Price: <b>{{ad.price}}</b></h5>
+
+            <h5>Description: <b>{{ad.price}}</b></h5>
+
+            <hr>
+
+            <div class="text-right">
+
+                <button class="btn btn-primary btn-sm" [routerLink]="['/company/ad' , ad.id]">Update</button>
+                <button class="btn btn-danger btn-sm ml-2" (click)="deleteAd(ad.id)">Delete</button>
+
+            </div>
+        </div>
+    </div>
+</div>

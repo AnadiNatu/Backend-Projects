@@ -1,0 +1,35 @@
+.container{
+    max-width:600px;
+    margin: 0 auto;
+    padding: 20px;
+
+}
+
+h2{
+    text-align: center;
+    margin-bottom: 20px;
+    color: #3f51b5;
+
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+mat-form-feild{
+    margin-top: 20px;
+}
+
+button{
+    align-items: center;
+    margin-top: 16px;
+}
+
+.container form {
+    padding: 10px;
+}
+
+.container form mat-form-feild{
+    margin-bottom: 10px;
+}

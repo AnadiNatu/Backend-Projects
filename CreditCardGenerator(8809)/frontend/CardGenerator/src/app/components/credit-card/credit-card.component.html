@@ -1,0 +1,36 @@
+<div class="container mt-4">
+    <h2>Create Card</h2>
+
+    <form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" class="form-control" formControlName="name">
+            <div *ngIf="validateForm.get('name').invalid && validateForm.get('name').touched" class="text-danger">
+                Name is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="bankName" class="form-label">Bank Name</label>
+            <input id="bankName" type="text" class="form-control" formControlName="bankName" />
+            <div *ngIf="validateForm.get('bankName').invalid && validateForm.get('bankName').touched" class="text-danger">
+              Bank Name is required
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="validateForm.invalid">Generate Credit Card</button>
+    </form>
+
+
+    <div *ngIf="creditCard" class="mt-4">
+        <h3>Credit Card Details</h3>
+        <p><strong>Card Number : </strong>{{creditCard.cardNumber}}</p>
+        <p><strong>Card Holder Name : </strong>{{creditCard.name}}</p>
+        <p><strong>Expiry Date : </strong>{{creditCard.expiryDate}}</p>
+        <p><strong>CVV : </strong>{{creditCard.cvv}}</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="mt-4 text-danger">
+        {{errorMessage}}
+    </div>
+</div>

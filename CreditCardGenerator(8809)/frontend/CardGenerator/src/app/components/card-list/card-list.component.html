@@ -1,0 +1,35 @@
+<div class="container mt-4">
+    <h2>All Credit Cards</h2>
+    <div *ngIf="creditCards.length > 0; else noCards">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Card Number</th>
+            <th scope="col">Expiry Date</th>
+            <th scope="col">CVV</th>
+            <th scope="col">Customer Name</th>
+            <th scope="col">Bank Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let card of creditCards">
+            <td>{{ card.cardNumber }}</td>
+            <td>{{ card.expiryDate }}</td>
+            <td>{{ card.cvv }}</td>
+            <td>{{ card.customerName }}</td>
+            <td>{{ card.bankName }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noCards>
+      <div class="alert alert-warning" role="alert">
+        No credit cards available.
+      </div>
+    </ng-template>
+  
+    <div *ngIf="errorMessage" class="mt-4 text-danger">
+      {{ errorMessage }}
+    </div>
+  </div>
+  

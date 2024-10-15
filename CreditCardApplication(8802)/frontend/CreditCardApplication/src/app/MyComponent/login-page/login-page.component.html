@@ -1,0 +1,59 @@
+<div style="padding-left: 500px; margin: 10px;">
+
+    <button class="btn btn-primary" (click)="handleAdm()">Admin</button>
+    <button class="btn btn-primary" (click)="handleAdm()">Admin</button>
+
+
+</div>
+
+<div *ngIf="boolCus" class="customerlogin d-flex justify-content-center">  
+
+    <h3>Customer Login</h3>
+    <form (ngSubmit)="onSubmitC()" class="flex-column" style="padding-top: 70px;">
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <br>
+            <input type="text" name="email" placeholder="Email" [(ngModel)]='loginDetailC.fname' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Password</label>
+            <br>
+            <input type="password" name="password" placeholder="Password" [(ngModel)]='loginDetailC.password' required>
+        </div>
+
+        <div class="mr-4" style="display: inline-flex;">
+
+            <input type="submit" class="btn btn-primary" style="margin: 4px;">
+            <input type="reset" class="btn btn-danger">
+
+        </div>
+    </form>
+
+</div>
+
+<div *ngIf="boolAdm" class="adminlogin d-flex justify-content-center">  
+
+    <h3>Admin Login</h3>
+    <form (ngSubmit)="onSubmitA()" class="flex-column" style="padding-top: 70px;">
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <br>
+            <input type="text" name="email" placeholder="Email" [(ngModel)]='loginDetailA.fname' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Password</label>
+            <br>
+            <input type="password" name="password" placeholder="Password" [(ngModel)]='loginDetailA.password' required>
+        </div>
+
+        <div class="mr-4" style="display: inline-flex;">
+
+            <input type="submit" class="btn btn-primary" style="margin: 4px;">
+            <input type="reset" class="btn btn-danger">
+
+        </div>
+    </form>
+
+</div>

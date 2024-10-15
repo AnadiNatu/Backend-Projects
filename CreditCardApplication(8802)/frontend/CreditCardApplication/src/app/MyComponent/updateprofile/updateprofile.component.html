@@ -1,0 +1,69 @@
+<h4>Update Customer Detail</h4>
+
+<div class="customerform d-flex justify-content-center">
+
+    <form (ngSubmit)="onUpdateC()" class="flex-column">
+        <div class="mb-3">
+            <label for="fname">First Name</label>
+            <br>
+            <input type="text" name="fname" placeholder="First Name" [(ngModel)]='custoerDetC.fname' required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="lname">Last Name</label>
+            <br>
+            <input type="text" name="lname" placeholder="Last Name" [(ngModel)]='custoerDetC.lname' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <br>
+            <input type="text" name="email" placeholder="abc@gmail.com" [(ngModel)]='custoerDetC.email' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password">Password</label>
+            <br>
+            <input type="password" name="password" placeholder="Password" [(ngModel)]='custoerDetC.password' required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="phoneNumber">Phone Number</label>
+            <br>
+            <input type="phone number" name="phoneNumber" placeholder="1234567890" [(ngModel)]='custoerDetC.phoneNumber' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="age">Age</label>
+            <br>
+            <input type="number" name="age" placeholder="Age" [(ngModel)]='custoerDetC.age' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="dateofbirth">Date of Birth</label>
+            <br>
+            <input type="date" name="dateofbirth" placeholder="Date Of Birth" [(ngModel)]='custoerDetC.dateofbirth' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="address">Address</label>
+            <br>
+            <input type="text" name="address" placeholder="Address" [(ngModel)]='custoerDetC.address' required>
+        </div>
+
+        <div class="mb-3">
+            <label for="addressProof">Address Proof</label>
+            <br>
+            <input type="text" name="addressProof" placeholder="Address Proof" [(ngModel)]='custoerDetC.addressProof' required>
+        </div>
+
+        <div class="mr-4" style="display: inline-flexbox;">
+
+            <input type="submit" class="btn btn-success" style="margin: 4px;">
+
+            <input type="reset" class="btn btn-danger">
+
+        </div>
+    </form>
+
+</div>

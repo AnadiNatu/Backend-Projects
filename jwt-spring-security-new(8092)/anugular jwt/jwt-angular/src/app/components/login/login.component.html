@@ -1,0 +1,7 @@
+<form [formGroup] = "loginForm!">
+
+    <input type="email" name="email" id="email" placeholder="Enter Email" formControlName="email">
+    <input type="password" name="password" id="password" placeholder="Enter Password" formControlName=""password>
+<button type="button" (click)="login()" [disabled]="!loginForm.valid">Login</button>
+
+</form>

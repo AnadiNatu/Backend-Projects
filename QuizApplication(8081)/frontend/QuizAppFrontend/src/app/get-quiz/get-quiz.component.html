@@ -1,0 +1,48 @@
+<div class="container mt-4">
+    <h2>Start Quiz</h2>
+    <form [formGroup]="quizIdForm" (ngSubmit)="onSubmitQuizId()">
+        <div class="form-group">
+            <label for="quizId">Quiz Id</label>
+            <input id="quizId" formControlName="quizId" class="form-control" placeholder="Enter the Quiz Id">
+        </div>
+
+        <button type="submit" class="btn , btn-primary mt-2" > Get Quiz</button>
+    </form>
+
+
+    <div *ngIf="quizQuestion.length > 0 && result === null" class="mt-4">
+        <h3>{{quizQuestion[currentQuestionIndex]?.questionTitle}}</h3>
+
+        <form [formGroup]="quizForm" (ngSubmit)="currentQuestionIndex < quizQuestion.length -1 ? onNext() : onSubmit()">
+            <div class="form-check" *ngIf="quizQuestion[currentQuestionIndex]">
+                <input class="form-check-input" type="radio" formControlName="response" [value]="quizQuestion[currentQuestionIndex].option1">
+                <label class="form-check-label">{{quizQuestion[currentQuestionIndex].option1}}</label>
+            </div>
+
+            <div class="form-check" *ngIf="quizQuestion[currentQuestionIndex]">
+                <input class="form-check-input" type="radio" formControlName="response" [value]="quizQuestion[currentQuestionIndex].option2">
+                <label class="form-check-label">{{quizQuestion[currentQuestionIndex].option2}}</label>
+            </div>
+
+            <div class="form-check" *ngIf="quizQuestion[currentQuestionIndex]">
+                <input class="form-check-input" type="radio" formControlName="response" [value]="quizQuestion[currentQuestionIndex].option3">
+                <label class="form-check-label">{{quizQuestion[currentQuestionIndex].option3}}</label>
+            </div>
+
+            <div class="form-check" *ngIf="quizQuestion[currentQuestionIndex]">
+                <input class="form-check-input" type="radio" formControlName="response" [value]="quizQuestion[currentQuestionIndex].option4">
+                <label class="form-check-label">{{quizQuestion[currentQuestionIndex].option4}}</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">
+                {{currentQuestionIndex < quizQuestion.length -1 ? 'Next' : 'Submit'}}
+            </button>
+        </form>
+    </div>
+
+    <div *ngIf="result !== null" class="mt-4">
+        <h3>Your Quiz Result : {{result}}</h3>
+
+        <button class="btn btn-primary" [routerLink]="['/contestant']">Back  to the Contestant Page</button>
+    </div>
+</div>

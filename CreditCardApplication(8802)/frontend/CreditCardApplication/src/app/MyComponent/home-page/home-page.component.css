@@ -1,0 +1,27 @@
+div{
+    background-color: black;
+    position: relative;
+}
+
+div .logbutton{
+    position: absolute;
+    left: 90vh;
+    right: 45vh;
+    margin-right: 10px;
+}
+
+div .regbutton{
+    position: absolute;
+    left: 106vh;
+    top: 45vh;
+    margin-right: 10px;
+}
+
+div h1{
+    background-color: transparent;
+    box-shadow: inset;
+    position: absolute;
+    margin: 200px;
+    left: 55vh;
+    top: 30%;
+}

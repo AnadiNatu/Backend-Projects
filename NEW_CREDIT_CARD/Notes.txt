@@ -1,0 +1,26 @@
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'scopedTarget.eurekaClient' defined in class path resource [org/springframework/cloud/netflix/eureka/EurekaClientAutoConfiguration$RefreshableEurekaClientConfiguration.class]: Unsatisfied dependency expressed through method 'eurekaClient' parameter 3: No qualifying bean of type 'com.netflix.discovery.shared.transport.jersey.TransportClientFactories<?>' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+
+
+- This error was there because no @EnableEurekaConfiguration on the main class
+
+
+
+
+orElseThrow() is in red in my IntelliJ . The method is not recognized . How to solve this problem
+
+-It looks like the method findByEmail(email) in your repository might be returning a CustomerDetail object directly instead of an Optional<CustomerDetail>. Repository , used findBy query without Optional<> 
+
+
+
+
+admin-service port 9010
+
+auth-service port 9011
+
+card-service port 9012
+
+transaction-service port 9013
+
+service-registry port 8762
+
+

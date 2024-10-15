@@ -1,0 +1,112 @@
+package com.web.customer_service.dto;
+
+public class RegistrationDto {
+
+    private Long id;
+    private String fname;
+    private String lname;
+    private String age;
+    private String phoneNumber;
+    private String dateOfBirth;
+    private String email;
+    private String password;
+    private String address;
+    private String addressProof;
+
+    public RegistrationDto() {
+    }
+
+    public RegistrationDto(Long id, String fname, String lname, String age, String phoneNumber, String dateOfBirth, String email, String password, String address, String addressProof) {
+        this.id = id;
+        this.fname = fname;
+        this.lname = lname;
+        this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.addressProof = addressProof;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFname() {
+        return fname;
+    }
+
+    public void setFname(String fname) {
+        this.fname = fname;
+    }
+
+    public String getLname() {
+        return lname;
+    }
+
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddressProof() {
+        return addressProof;
+    }
+
+    public void setAddressProof(String addressProof) {
+        this.addressProof = addressProof;
+    }
+}

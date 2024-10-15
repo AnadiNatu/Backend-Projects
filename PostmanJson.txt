@@ -1,0 +1,118 @@
+{
+    "serviceName":"Painters",
+    "description":"Home renovations and decors",
+    "price":67.98,
+}
+
+{
+    "username":"namastewholeseller@test.com",
+    "password":"Namaste Whole Seller"
+}
+
+
+{
+    "companyName":"Cum Again Bedmakers",
+    "username":"cumagain@test.com",
+    "password":"Cum Again",
+    "phone":"9876543451"
+}
+
+
+
+localhost:8090/api/company/ad/6
+localhost:8090/api/auth/login
+
+Quiz
+
+{
+   "name":"Adam",
+   "username":"adam@test.com",
+   "password":"adam",
+   "age":23
+}
+
+{
+   "username":"adam@test.com",
+   "password":"adam"
+}
+
+
+{
+   "username":"admin@test.com",
+   "password":"admin"
+}
+
+{
+"questionTitle":"Example Title",
+    "option1":"option1",
+    "option2":"option2",
+    "option3":"option3",
+    "option4":"option4",
+    "rightAnswer":"option2",
+    "difficultyLevel":"Low",
+    "category":"Java"
+}
+
+{
+  "categoryName":"Backend",
+  "numberQuestions":4,
+  "title":"Backend Test"
+}
+
+{
+  "categoryName":"Frontend",
+  "numberQuestions":4,
+  "title":"Frontend Test"
+}
+
+
+[
+    {
+        "id": 36,
+        "response": "A) Django"
+    },
+    {
+        "id": 31,
+        "response": "D) Create, Read, Update, Delete"
+    },
+    {
+        "id": 42,
+        "response": "B) Model and View are independent and do not communicate directly"
+    },
+    {
+        "id": 41,
+        "response": "A) Displaying data to the user"
+    }
+]
+
+INSERT INTO public.questions(
+	category, difficulty_level, option1, option2, option3, option4, question_title, right_answer)
+	VALUES ('Full Stack', 'Easy', 'A) Development that involves stack data structures', 'B) Development that involves front-end and back-end programming', 'C) Development that involves only backend programming', 'D) None of the above', 'What does the term "Full Stack Development" refer to?', 'B) Development that involves front-end and back-end programming'),
+('Database', 'Medium', 'A) HTML', 'B) CSS', 'C) JavaScript', 'D) SQL', 'Which of the following is not a front-end technology?', 'D) SQL'),
+('Frontend', 'Hard', 'A) To provide the client-side interface', 'B) To manage database', 'C) To reduce the server load', 'D) To send http requests', 'The purpose of the Front-end framework in Full stack development is ____.', 'A) To provide the client-side interface'),
+('Backend', 'Easy', 'A) Python', 'B) C++', 'C) JavaScript', 'D) Both A and C', 'Amongst which of the following programming language is used as a server-side language?', 'D) Both A and C'),
+('Frontend', 'Medium', 'A) A development platform for developing user-interface for software applications', 'B) A database to store and manage the data of an application', 'C) A development platform for writing server-side logic', 'D) None of the above', 'What is a Front-end framework?', 'A) A development platform for developing user-interface for software applications'),
+('Full Stack', 'Hard', 'A) Styling HTML pages', 'B) Storing and retrieving data', 'C) Handling errors on server-side', 'D) Rendering web pages', 'Database in Full stack development is used to ____.', 'B) Storing and retrieving data'),
+('Full Stack', 'Easy', 'A) Framework', 'B) Version control system', 'C) Database', 'D) Package manager', 'What is Git?', 'B) Version control system'),
+('Backend', 'Medium', 'A) Create, Read, Upload, Delete', 'B) Create, Read, Upgrade, Deploy', 'C) Create, Remove, Upgrade, Delete', 'D) Create, Read, Update, Delete', 'CRUD stands for ____.', 'D) Create, Read, Update, Delete'),
+('Backend', 'Hard', 'A) Running the project on a server to make it accessible to all', 'B) Bundling all the project files into a single file', 'C) Removing unnecessary files', 'D) Updating existing project', 'The term "deployment" refers to', 'A) Running the project on a server to make it accessible to all'),
+('Full Stack', 'Easy', 'A) Rendering the user interface', 'B) Handling client-side interactions', 'C) Executing server-side code and processing requests', 'D) Writing server-side logics', 'A web server in Full Stack Development is ____.', 'C) Executing server-side code and processing requests'),
+('Frontend', 'Medium', 'A) Synchronous', 'B) Asynchronous', 'C) Both', 'D) Synchronous but can be used as asynchronous', 'Is JavaScript synchronous or asynchronous?', 'D) Synchronous but can be used as asynchronous'),
+('Frontend', 'Hard', 'A) Standard Page Application', 'B) Single Page Application', 'C) Smart Protocol Authentication', 'D) Scalable Performance Architecture', 'SPA stands for ____.', 'B) Single Page Application'),
+('Backend', 'Easy', 'A) Django', 'B) Flask', 'C) Both A and B', 'D) None of the above', 'Amongst which of the following is a back-end framework in Python?', 'C) Both A and B'),
+('Database', 'Medium', 'A) Relational', 'B) JSON', 'C) XML', 'D) GraphQL', 'Amongst which of the following type of database is used in Full stack development?', 'A) Relational'),
+('Frontend', 'Hard', 'A) HTTP', 'B) TCP/IP', 'C) SMTP', 'D) FTP', 'Amongst which of the following protocol is used to exchange the data between client and server?', 'A) HTTP'),
+('Frontend', 'Easy', 'A) To style and format HTML elements', 'B) To manage http request and response', 'C) To store and retrieve data', 'D) None of the above', 'What is the purpose of CSS in Full stack development?', 'A) To style and format HTML elements'),
+('Frontend', 'Medium', 'A) AJAX enables asynchronous data retrieval without reloading the entire page', 'B) AJAX improves the design layout', 'C) AJAX helps in creating dynamic websites', 'D) AJAX is a popular query language for Full stack development', 'Which of the following statement is TRUE about AJAX?', 'A) AJAX enables asynchronous data retrieval without reloading the entire page'),
+('Backend', 'Hard', 'A) Displaying data to the user', 'B) Optimize database queries', 'C) Handle clients request', 'D) Manage server-side routing', 'The role of view in model-view-controller architecture is ____.', 'A) Displaying data to the user'),
+('Backend', 'Easy', 'A) The View accesses the data from the Model using AJAX calls', 'B) Model and View are independent and do not communicate directly', 'C) Model and View communicate via Controller', 'D) Model and View communicate directly', 'Amongst which of the following is TRUE about model-view-architecture?', 'B) Model and View are independent and do not communicate directly'),
+('Database', 'Medium', 'A) MongoDB', 'B) PostgreSQL', 'C) CouchDB', 'D) Hadoop', 'Amongst which of the following is not a NoSQL database used in Full Stack Development?', 'D) Hadoop'),
+('Frontend', 'Hard', 'A) Ruby', 'B) Express.js', 'C) Flask', 'D) Spring Boot', 'Amongst which of the following technology uses Pipelines to handle request/response', 'B) Express.js'),
+('Frontend', 'Hard', 'A) Pretty Hyperlink Protocol', 'B) Processed Hypertext Pages', 'C) Hypertext Preprocessor', 'D) Personal Home Page', 'PHP stands for ', 'C) Hypertext Preprocessor');
+
+
+
+// Pokémon 
+
+
+

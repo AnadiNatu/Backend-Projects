@@ -1,0 +1,621 @@
+.) spring.datasource.driverClassName=org.h2.Driver
+.) spring.datasource.username=sa
+.) spring.datasource.password=
+.) spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+.) server.port=
+
+
+.) spring.datasource.driver-class-name=org.postgresql.Driver
+.) spring.datasource.url=jdbc:postgresql://localhost:5432/pokemondb
+.) spring.datasource.username=postgres
+.) spring.datasource.password=Anadi@1234
+.) spring.jpa.hibernate.ddl-auto=update
+.) spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+.) spring.jpa.show-sql=true
+
+.) app.client.url = http://localhost:4200/*
+
+.) spring.cloud.gateway.discovery.locator.enabled=true
+.) spring.cloud.gateway.discovery.locator.lower-case-service-id=true
+
+.) eureka.instance.hostname=localhost
+.) eureka.client.fetch-registry=false
+.) eureka.client.register-with-eureka=false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pokémon Security
+
+CustomUserDetailService
+
+@Service
+public class CustomUserDetailService implements UserDetailsService {
+
+    private UserRepository userRepository;
+
+    @Autowired
+    public CustomUserDetailService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+
+        UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        return new User(user.getUsername() , user.getPassword() , mapRoleToAuthorities(user.getRoles()));
+
+        //User requires a roles that we need for the function
+    }
+
+    private Collection<GrantedAuthority> mapRoleToAuthorities(List<Role> roles){
+
+        return roles.stream().map( role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+
+        //
+    }
+}
+
+
+
+
+JWTAuthenticationFilter
+
+
+@Component
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtGenerator jwtGenerator;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String token = getJWTFromRequest(request);
+
+        if (StringUtils.hasText(token) && jwtGenerator.validateToken(token)){
+            String username =  jwtGenerator.getUsernameFromJwt(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails , null , userDetails.getAuthorities());
+
+
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+               }
+        filterChain.doFilter(request,response);
+    }
+    private String getJWTFromRequest( HttpServletRequest request ) {
+        String bearerToken = request.getHeader("Authentication");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")){
+
+            return bearerToken.substring(7 , bearerToken.length());
+        }
+        return null ;
+    }
+
+}
+
+
+
+JwtAuthEntryPoint 
+
+@Component
+public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
+
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED , authException.getMessage());
+
+    }
+}
+
+
+
+JwtGenerator
+
+public class JwtGenerator {
+
+    public String generateToken(Authentication authentication){
+
+        String username = authentication.getName();
+        Date currentDate = new Date();
+        Date expirationDate = new Date(currentDate.getTime() + SecurityConstant.JWT_EXPIRATION);
+
+
+        String token = Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.ES256 , SecurityConstant.JWT_SECRET)
+                .compact();
+        return token;
+    }
+
+
+
+    public String getUsernameFromJwt(String token){
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(SecurityConstant.JWT_SECRET)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token){
+
+        try {
+            Jwts.parserBuilder().setSigningKey(SecurityConstant.JWT_SECRET).build().parseClaimsJwt(token);
+            return true;
+        }catch (Exception ex){
+            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
+        }
+    }
+}
+
+
+
+
+SecurityConfig
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    private CustomUserDetailService customUserDetailService;
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
+
+
+    @Autowired
+    public SecurityConfig(CustomUserDetailService customUserDetailService , JwtAuthEntryPoint jwtAuthEntryPoint) {
+        this.customUserDetailService = customUserDetailService;
+        this.jwtAuthEntryPoint = jwtAuthEntryPoint;
+
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+        http.csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic();
+
+                http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                return http.build();
+
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+
+        return authenticationConfiguration.getAuthenticationManager();
+
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+
+        return new BCryptPasswordEncoder();
+
+    }
+
+    @Bean
+    public JWTAuthenticationFilter jwtAuthenticationFilter(){
+
+        return new JWTAuthenticationFilter();
+    }
+}
+
+
+SecurityConstant
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Service Booking Security
+
+
+
+SimpleCorsFilter
+
+
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class SimpleCorsFilter implements Filter {
+
+    @Value("${app.client.url")
+    private String clientAppUrl = "";
+
+    public SimpleCorsFilter(){
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+        ServletResponse res = servletResponse;
+        HttpServletResponse response= (HttpServletResponse) res;
+        ServletRequest req = servletRequest;
+        HttpServletRequest  request = (HttpServletRequest) req;
+
+        Map<String , String> map =  new HashMap<>();
+
+        String originHeader = request.getHeader("origin");
+
+        response.setHeader("Allow-Control-Allow-Origin",originHeader);
+        response.setHeader("Allow-Control-Allow-Methods" , "POST , GET , PUT , OPTIONS , DELETE");
+        response.setHeader("Allow-Control-Max-Age" , "3688");
+        response.setHeader("Allow-Control-Allow-Headers" , "*");
+
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())){
+            response.setStatus(HttpServletResponse.SC_OK);
+        }else {
+            filterChain.doFilter(req,res);
+        }
+    }
+}
+
+
+WebSecurityConfig
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class WebSecurityConfig {
+
+    @Autowired
+    private JwtRequestFilter requestFilter;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
+
+        return http.csrf().disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/authenticate" , "/company/sign-up" , "/client/sign-up" , "/ads" , "/search/{service}").permitAll()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/**")
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(requestFilter , UsernamePasswordAuthenticationFilter.class)
+                .build();
+
+    }
+
+    @Bean
+    public AuthenticationManager authenicationManager(AuthenticationConfiguration configuration ) throws Exception{
+//Error - here I wrote AuthenticationManager instead of AuthenticationConfiguration in the parameter of this AuthenticationManager function
+        return configuration.getAuthenticationManager();
+
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+
+        return new BCryptPasswordEncoder();
+    }
+
+
+
+}
+
+
+AuthenticationController
+
+
+@RestController
+
+public class AuthenticationController {
+
+
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailServiceImpl userDetailService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public static final String TOKEN_PREFIX = "Bearer";
+
+    public static final String HEADER_PREFIX = "Authorization";
+
+    @PostMapping("/client/sigh-up")
+    public ResponseEntity<?> signUpClient(@RequestBody SignupRequestDto signupRequestDto){
+
+        if (authService.presentByEmail(signupRequestDto.getEmail())) {
+            return new ResponseEntity<>("Client already exists with this Email" , HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDto createdUser = authService.signupClient(signupRequestDto);
+
+        return new ResponseEntity<>(createdUser  , HttpStatus.CREATED);
+    }
+
+    @PostMapping("/company/sigh-up")
+    public ResponseEntity<?> signUpCompany(@RequestBody SignupRequestDto signupRequestDto){
+
+        if (authService.presentByEmail(signupRequestDto.getEmail())) {
+            return new ResponseEntity<>("Client already exists with this Email" , HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDto createdUser = authService.signupCompany(signupRequestDto);
+
+        return new ResponseEntity<>(createdUser  , HttpStatus.CREATED);
+    }
+
+    @PostMapping("/autheticate")
+    public void createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest , HttpServletResponse response) throws IOException, JSONException {
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername()
+                    ,authenticationRequest.getPassword()));
+
+        }catch (BadCredentialsException e){
+            throw new BadCredentialsException("Inappropriate username or password" , e);
+        }
+
+        final UserDetails userDetails = userDetailService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+
+        User user = userRepository.findFirstByEmail(authenticationRequest.getUsername());
+
+        response.getWriter().write(new JSONObject()
+                .put("userId", user.getId())
+                .put("role" , user.getRole())
+                .toString());
+
+        response.addHeader("Access-Control-Expose-Header" , "Authenticate");
+        response.addHeader("Access_Controll-Allow-Header" , "Authorization" +
+                " X-PINGOTHER , Origin , X-Requested-With , Content-Type , Accept , X-Custom-header");
+        //this part of code is help expose the headers to our angular project
+
+        response.addHeader(HEADER_PREFIX,TOKEN_PREFIX+jwt);
+    }
+}
+
+
+AuthServiceImple
+
+
+@Service
+public class AuthServiceImpl implements AuthService{
+    @Autowired
+    private UserRepository userRepository;
+    
+    public UserDto signupClient (SignupRequestDto signupRequestDto){
+
+        User user = new User();
+
+        user.setFname(signupRequestDto.getFname());
+        user.setLname(signupRequestDto.getLname());
+        user.setPhone(signupRequestDto.getPhone());
+        user.setEmail(signupRequestDto.getEmail());
+        user.setPassword(new BCryptPasswordEncoder(Integer.parseInt(signupRequestDto.getPassword())).toString());
+
+        user.setRole(UserRole.CLIENT);
+
+        return userRepository.save(user).getDto();
+        
+    }
+    
+    public Boolean presentByEmail(String email){
+        return userRepository.findFirstByEmail(email) != null;
+    }
+
+    public UserDto signupCompany (SignupRequestDto signupRequestDto){
+        User user = new User();
+
+        user.setFname(signupRequestDto.getFname());
+        user.setPhone(signupRequestDto.getPhone());
+        user.setEmail(signupRequestDto.getEmail());
+        user.setPassword(new BCryptPasswordEncoder(Integer.parseInt(signupRequestDto.getPassword())).toString());
+
+        user.setRole(UserRole.COMPANY);
+
+        return userRepository.save(user).getDto();
+        
+    }
+}
+
+
+JwtRequestFilter
+
+
+@Component
+public class JwtRequestFilter extends OncePerRequestFilter {
+    
+    @Autowired
+    private UserDetailServiceImpl userDetailService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String authHeader = request.getHeader("Authorization");
+
+        String token = null;
+        String username = null;
+
+        if(authHeader != null && authHeader.startsWith("Bearer ")){
+            token = authHeader.substring(7);
+            username = jwtUtil.extractUsername(token);
+        }
+        
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+
+            UserDetails userDetail = userDetailService.loadUserByUsername(username);
+
+            if (jwtUtil.validateToken(token,userDetail)){
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetail , null , userDetail.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
+        filterChain.doFilter(request,response);
+    }
+}
+
+
+UserDetailServicFilter
+
+
+@Service
+public class UserDetailServiceImpl implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        User user = userRepository.findFirstByEmail(email);
+
+        if (user == null)
+            throw new UsernameNotFoundException("Username not found" , null);
+
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),new ArrayList<>());
+    }
+}
+
+
+
+JwtUtil
+
+
+
+@Component
+public class JwtUtil {
+
+    public static String SECRET = "8858908086F128855555555575T7578585IU0079";
+
+    public String createToken(Map<String,Object> claim , String userName){
+
+        return Jwts.builder()
+                .setClaims(claim)
+                .setSubject(userName)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*60))
+                .signWith(SignatureAlgorithm.HS256, getSignKey()).compact();
+    }
+
+    private Key getSignKey(){
+        byte[] KeyBytes = Decoders.BASE64.decode(SECRET);
+        return Keys.hmacShaKeyFor(KeyBytes);
+    }
+
+    public String generateToken(String userName){
+
+        Map<String,Object> claims = new HashMap<>();
+
+        return createToken(claims,userName);
+    }
+
+    private Claims extractAllClaims(String token){
+
+        return Jwts.parser()
+                .setSigningKey(getSignKey())
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public <T> T extractClaim(String token , Function<Claims, T> claimResolver){
+
+        final Claims claims = extractAllClaims(token);
+
+        return claimResolver.apply(claims);
+
+    }
+
+    public Date extractExpiration(String token){
+
+        return extractClaim(token , Claims::getExpiration);
+
+    }
+
+    public String extractUsername(String token){
+
+        return extractClaim(token , Claims::getSubject);
+
+    }
+
+    private Boolean isTokenExpired(String token){
+
+        return extractExpiration(token).before(new Date());
+
+    }
+
+    public Boolean validateToken(String token , UserDetails userDetails){
+
+        final String username = extractUsername(token);
+
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+
+    }
+}
+
+
+
+
+

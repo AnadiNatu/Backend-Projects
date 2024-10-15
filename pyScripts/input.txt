@@ -1,0 +1,159 @@
+What does the term "Full Stack Development" refer to?
+
+Development that involves stack data structures
+Development that involves front-end and back-end programming
+Development that involves only backend programming
+None of the above
+B) Development that involves front-end and back-end programming
+
+Which of the following is not a front-end technology?
+
+HTML
+CSS
+JavaScript
+SQL
+D) SQL
+
+The purpose of the Front-end framework in Full stack development is ____.
+
+To provide the client-side interface
+To manage database
+To reduce the server load
+To send http requests
+A) To provide the client-side interface
+
+Amongst which of the following programming language is used as a server-side language?
+
+Python
+C++
+JavaScript
+Both A and C
+D) Both A and C
+
+What is a Front-end framework?
+
+A development platform for developing user-interface for software applications
+A database to store and manage the data of an application
+A development platform for writing server-side logic
+None of the above
+A) A development platform for developing user-interface for software applications
+
+Database in Full stack development is used to ____.
+
+Styling HTML pages
+Storing and retrieving data
+Handling errors on server-side
+Rendering web pages
+B) Storing and retrieving data
+
+What is Git?
+
+Framework
+Version control system
+Database
+Package manager
+B) Version control system
+
+CRUD stands for ____.
+
+Create, Read, Upload, Delete
+Create, Read, Upgrade, Deploy
+Create, Remove, Upgrade, Delete
+Create, Read, Update, Delete
+D) Create, Read, Update, Delete
+
+The term "deployment" refers to
+
+Running the project on a server to make it accessible to all
+Bundling all the project files into a single file
+Removing unnecessary files
+Updating existing project
+A) Running the project on a server to make it accessible to all
+
+1A web server in Full Stack Development is ____.
+
+Rendering the user interface
+Handling client-side interactions
+Executing server-side code and processing requests
+Writing server-side logics
+C) Executing server-side code and processing requests
+
+1Is JavaScript synchronous or asynchronous?
+
+Synchronous
+Asynchronous
+Both
+Synchronous but can be used as asynchronous
+D) Synchronous but can be used as asynchronous
+
+1SPA stands for ____.
+
+Standard Page Application
+Single Page Application
+Smart Protocol Authentication
+Scalable Performance Architecture
+B) Single Page Application
+
+1Amongst which of the following is a back-end framework in Python?
+
+Django
+Flask
+Both A and B
+None of the above
+C) Both A and B
+
+1Amongst which of the following type of database is used in Full stack development?
+
+Relational
+JSON
+XML
+GraphQL
+A) Relational
+
+1Amongst which of the following protocol is used to exchange the data between client and server?
+
+HTTP
+TCP/IP
+SMTP
+FTP
+A) HTTP
+
+1What is the purpose of CSS in Full stack development?
+
+To style and format HTML elements
+To manage http request and response
+To store and retrieve data
+None of the above
+A) To style and format HTML elements
+
+1Which of the following statement is TRUE about AJAX?
+
+AJAX enables asynchronous data retrieval without reloading the entire page
+AJAX improves the design layout
+AJAX helps in creating dynamic websites
+AJAX is a popular query language for Full stack development
+A) AJAX enables asynchronous data retrieval without reloading the entire page.
+
+1The role of view in model-view-controller architecture is ____.
+
+Displaying data to the user
+Optimize database queries
+Handle client's request
+Manage server-side routing
+A) Displaying data to the user
+
+1Amongst which of the following is TRUE about model-view-architecture?
+
+The View accesses the data from the Model using AJAX calls
+Model and View are independent and do not communicate directly
+Model and View communicate via Controller
+Model and View communicate directly
+B) Model and View are independent and do not communicate directly
+
+2Amongst which of the following is not a NoSQL database used in Full Stack Development?
+
+MongoDB
+PostgreSQL
+CouchDB
+Hadoop
+D) Hadoop

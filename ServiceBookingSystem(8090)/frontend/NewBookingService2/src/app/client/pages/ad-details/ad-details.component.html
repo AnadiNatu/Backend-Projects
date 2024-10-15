@@ -1,0 +1,23 @@
+<div class="container mt-5">
+    <div class="row justifycontent-center">
+        <div class="col-md-6">
+            <img [src]="avatarUrl" alt="Ad Img" class="img-fluid mb-4">
+            <h2>{{ad?.title}}</h2>
+            <p>{{ad?.description}}</p>
+            <form [formGroup]="validateForm" (ngSubmit)="bookService()">
+
+                <div class="form-group">
+                    <label for="bookDate">Booking Date</label>
+                    <input type="date" id="bookDate" class="form-control" formControlName="bookDate">
+                    <div *ngIf="validateForm.get('bookDate')?.invalid && (validateForm.get('bookDate')?.dirty || validateForm.get('bookDate')?.touched)"
+                        class="invalid-feedback">
+                        Booking date is required
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block">Book Service</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>

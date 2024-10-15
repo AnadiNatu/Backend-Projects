@@ -1,0 +1,87 @@
+<!-- <div class="questionCategory">
+
+    <div >
+        <input class="form-control me-2" type="search" placeholder="Input Category" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit" (click)="getQuestionByCategory(category)">Search</button>
+    </div>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">QuestionTitle</th>
+                <th scope="col">Option1</th>
+                <th scope="col">Option2</th>
+                <th scope="col">Option3</th>
+                <th scope="col">Option4</th>
+                <th scope="col">Right Answer</th>
+                <th scope="col">Category</th>
+                <th scope="col">Difficulty Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let question of questionList"></tr>
+            <td scope="row">{{question.id}}</td>
+            <td>{{question.questionTitle}}</td>
+            <td>{{question.option1}}</td>
+            <td>{{question.option2}}</td>
+            <td>{{question.option3}}</td>
+            <td>{{question.option4}}</td>
+            <td>{{question.rightAnswer}}</td>
+            <td>{{question.category}}</td>
+            <td>{{question.difficultylevel}}</td>
+        </tbody>
+
+    </table>
+
+    <div>
+        <a routerLink="/Creator" class="btn btn-primary">Back To Creator Page</a>
+        <a routerLink="/Creator" class="btn btn-primary">Add More Questions</a>
+    </div>
+</div> -->
+
+<div class="container mt-4">
+    <form [formGroup]="quizForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="category">Enter Category:</label>
+        <input id="category" formControlName="category" class="form-control" placeholder="Enter category" />
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Get Questions</button>
+    </form>
+  
+    <div *ngIf="questionList.length > 0; else noQuestions" class="mt-4">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Question Title</th>
+            <th>Option 1</th>
+            <th>Option 2</th>
+            <th>Option 3</th>
+            <th>Option 4</th>
+            <th>Right Answer</th>
+            <th>Difficulty Level</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let question of questionList">
+            <td>{{ question.id }}</td>
+            <td>{{ question.questionTitle }}</td>
+            <td>{{ question.option1 }}</td>
+            <td>{{ question.option2 }}</td>
+            <td>{{ question.option3 }}</td>
+            <td>{{ question.option4 }}</td>
+            <td>{{ question.rightAnswer }}</td>
+            <td>{{ question.difficultylevel }}</td>
+            <td>{{ question.category }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noQuestions>
+      <p>No questions available. Please enter a category to search for questions.</p>
+    </ng-template>
+  </div>
+  

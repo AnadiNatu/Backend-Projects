@@ -1,0 +1,43 @@
+<div style="background-color: blue;">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center">Create Ad</h2>
+                <form [formGroup]="validateForm" (ngSubmit)="postAd()">
+
+                    <div class="form-group text-center">
+                        <label for="upload_profile_img" class="upload-label" *ngIf="selectedFile">
+                            <img [src]="imagePreview" alt="profile" class="img-thumbnail">
+                        </label>
+                        <input type="file"  class="form-control-file" accept="image/x-png , image/gif , image/jpeg" (change)="onFileSelected($event)">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Service Name" formControlName="serviceName">
+                        <div *ngIf="validateForm.get('serviceName').invalid && validateForm.get('serviceName').touched" class="text-danger">
+                            This Input is Required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="number" class="form-control" placeholder="Price" formControlName="price">
+                        <div *ngIf="validateForm.get('price').invalid && validateForm.get('price').touched" class="text-danger">
+                            This Input is Required
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Description" formControlName="description">
+                        <div *ngIf="validateForm.get('description').invalid && validateForm.get('description').touched" class="text-danger">
+                            This Input is Required
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Add</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

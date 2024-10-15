@@ -1,0 +1,27 @@
+<div class="container mt-4">
+    <h2>Get Credit Card Details</h2>
+    <form [formGroup]="searchForm" (ngSubmit)="submitForm()">
+      <div class="mb-3">
+        <label for="name" class="form-label">Customer Name</label>
+        <input id="name" type="text" class="form-control" formControlName="name" />
+        <div *ngIf="searchForm.get('name').invalid && searchForm.get('name').touched" class="text-danger">
+          Name is required
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="searchForm.invalid">Get Card Details</button>
+    </form>
+  
+    <div *ngIf="creditCard" class="mt-4">
+      <h3>Credit Card Details</h3>
+      <p><strong>Card Number:</strong> {{ creditCard.cardNumber }}</p>
+      <p><strong>Expiry Date:</strong> {{ creditCard.expiryDate }}</p>
+      <p><strong>CVV:</strong> {{ creditCard.cvv }}</p>
+      <p><strong>Customer Name:</strong> {{ creditCard.customerName }}</p>
+      <p><strong>Bank Name:</strong> {{ creditCard.bankName }}</p>
+    </div>
+  
+    <div *ngIf="errorMessage" class="mt-4 text-danger">
+      {{ errorMessage }}
+    </div>
+  </div>
+  

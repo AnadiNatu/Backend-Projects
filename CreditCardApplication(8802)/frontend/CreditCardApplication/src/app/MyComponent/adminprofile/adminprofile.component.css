@@ -1,0 +1,15 @@
+.adminprofile{
+    padding: 25px;
+    margin: 10px;
+}
+
+.adminprofile table{
+    text-decoration: none;
+}
+
+.adminprofile th,tr,td{
+    background-color: aqua;
+    border: 2px solid salmon;
+    border-radius: 5px;
+    text-align: center;   
+}

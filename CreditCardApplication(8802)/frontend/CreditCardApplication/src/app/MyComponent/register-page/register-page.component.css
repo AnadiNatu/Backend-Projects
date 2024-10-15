@@ -1,0 +1,27 @@
+.customerform{
+    position: relative;
+    left: 350px;
+    background-color: rgba(red, green, blue, alpha);
+    width: 80vh;
+    height: 70vh;
+    overflow: scroll;
+    border: 3px dotted black;
+    border-radius: 10px;
+}
+
+.customerform{
+    position: relative;
+    left: 350px;
+    background-color: rgba(red, green, blue, alpha);
+    width: 80vh;
+    height: 70vh;
+    overflow: scroll;
+    border: 3px dotted black;
+    border-radius: 10px;
+}
+
+h3{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+}
